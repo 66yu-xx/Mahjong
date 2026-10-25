@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>二人麻将</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="viewport">
+  <div id="stage">
+    <header id="topbar">
+      <div class="logo"><span class="logo-tile">中</span><span class="logo-text">二人麻将</span><span class="logo-sub">国标 · 数番</span></div>
+      <div id="roundInfo" class="round-info"></div>
+      <div class="top-btns">
+        <button class="tbtn" id="btnNew" title="新游戏">⟳ 新游戏</button>
+        <button class="tbtn" id="btnHelp" title="番种说明">📖 番种说明</button>
+        <button class="tbtn" id="btnSettings" title="设置">⚙ 设置</button>
+        <button class="tbtn icon" id="btnSound" title="音效">🔊</button>
+      </div>
+    </header>
+    <main id="table">
+      <div class="felt-glow"></div>
+      <div id="badge1" class="badge top"></div>
+      <div id="badge0" class="badge bottom"></div>
+      <div id="row1" class="hand-row top"><div class="hand" id="hand1"></div><div class="melds" id="melds1"></div></div>
+      <div id="pool1" class="pool top"></div>
+      <div id="compass" class="compass"></div>
+      <div id="pool0" class="pool bottom"></div>
+      <div id="row0" class="hand-row bottom"><div class="hand" id="hand0"></div><div class="melds" id="melds0"></div></div>
+      <div id="logPanel" class="log-panel"><div class="log-title">对局记录</div><div id="log"></div></div>
+      <div id="hint" class="hint"></div>
+      <div id="actions" class="actions"></div>
+      <div id="toasts"></div>
+    </main>
+
+    <!-- 开始界面 -->
+    <div id="startScreen" class="overlay show">
+      <div class="start-card">
+        <div class="start-tiles" id="startTiles"></div>
+        <h1>二人麻将</h1>
+        <p class="sub">国标二人规则 · 吃碰杠 · 自动数番</p>
+        <div class="start-btns">
+          <button class="big-btn primary" data-mode="ai">🀄 人机对战</button>
+          <button class="big-btn" data-mode="hotseat">👥 双人同屏</button>
+        </div>
+        <div class="start-opts">
+          <div class="opt"><span>起和番</span><div class="seg" data-key="minFan"><button data-v="1">1 番</button><button data-v="8">8 番</button></div></div>
+          <div class="opt"><span>花牌</span><div class="seg" data-key="flowers"><button data-v="0">不用</button><button data-v="1">使用</button></div></div>
+          <div class="opt"><span>电脑速度</span><div class="seg" data-key="speed"><button data-v="1.6">慢</button><button data-v="1">中</button><button data-v="0.55">快</button></div></div>
+          <div class="opt"><span>语音报牌</span><div class="seg" data-key="voice"><button data-v="1">开</button><button data-v="0">关</button></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 双人同屏交接 -->
+    <div id="handoff" class="overlay">
+      <div class="handoff-card">
+        <div class="handoff-icon">🀫</div>
+        <h2 id="handoffTitle"></h2>
+        <p id="handoffSub">请对方回避，准备好后再查看手牌</p>
+        <button class="big-btn primary" id="handoffBtn">我准备好了</button>
+      </div>
+    </div>
+
+    <!-- 结算 -->
+    <div id="settle" class="overlay">
+      <div class="settle-card">
+        <div class="settle-ribbon" id="settleRibbon"></div>
+        <div class="settle-who" id="settleWho"></div>
+        <div class="settle-hand" id="settleHand"></div>
+        <div class="settle-body">
+          <div class="fan-list" id="fanList"></div>
+          <div class="settle-side">
+            <div class="fan-total" id="fanTotal"></div>
+            <div class="score-change" id="scoreChange"></div>
+          </div>
+        </div>
+        <div class="settle-btns">
+          <button class="big-btn" id="btnSettleView">看牌桌</button>
+          <button class="big-btn primary" id="btnNext">下一局 ▶</button>
+        </div>
+      </div>
+    </div>
+    <button id="btnBackToSettle" class="float-btn">返回结算</button>
+
+    <!-- 番种说明 -->
+    <div id="help" class="overlay">
+      <div class="panel-card wide">
+        <div class="panel-head"><h2>番种说明</h2><button class="close" data-close="help">✕</button></div>
+        <div class="panel-body" id="helpBody"></div>
+      </div>
+    </div>
+
+    <!-- 设置 -->
+    <div id="settings" class="overlay">
+      <div class="panel-card">
+        <div class="panel-head"><h2>设置</h2><button class="close" data-close="settings">✕</button></div>
+        <div class="panel-body settings-body">
+          <div class="opt"><span>对局模式</span><div class="seg" data-key="mode"><button data-v="ai">人机对战</button><button data-v="hotseat">双人同屏</button></div></div>
+          <div class="opt"><span>起和番</span><div class="seg" data-key="minFan"><button data-v="1">1 番</button><button data-v="8">8 番（国标）</button></div></div>
+          <div class="opt"><span>花牌</span><div class="seg" data-key="flowers"><button data-v="0">不用</button><button data-v="1">使用（每张 1 番）</button></div></div>
+          <div class="opt"><span>电脑速度</span><div class="seg" data-key="speed"><button data-v="1.6">慢</button><button data-v="1">中</button><button data-v="0.55">快</button></div></div>
+          <div class="opt"><span>语音报牌</span><div class="seg" data-key="voice"><button data-v="1">开</button><button data-v="0">关</button></div></div>
+          <div class="opt"><span>报牌声音</span><div class="voice-row"><select id="voiceSel" class="voice-sel"></select><button class="mini-btn" id="btnVoiceTest">试听</button></div></div>
+          <div class="opt"><span>语音音量</span><div class="voice-row"><input type="range" id="voiceVol" min="0" max="100" step="5"><b id="voiceVolTxt" class="vol-txt">85%</b></div></div>
+          <div class="opt"><span>音效</span><div class="seg" data-key="sound"><button data-v="1">开</button><button data-v="0">关</button></div></div>
+          <p class="note">模式、起和番、花牌的修改将在开始新游戏时生效；语音与音效设置立即生效。</p>
+          <div class="settings-btns"><button class="big-btn primary" id="btnApply">应用并开始新游戏</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 确认框 -->
+    <div id="confirm" class="overlay">
+      <div class="panel-card small">
+        <div class="panel-body"><p id="confirmText"></p>
+          <div class="settings-btns"><button class="big-btn" id="confirmNo">取消</button><button class="big-btn primary" id="confirmYes">确定</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="js/core.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>
